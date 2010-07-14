@@ -73,7 +73,7 @@ while(1) {
 	my ($max_entries, $have_entries, $buf);
 
 	if (($bytes = read($fh, $buf, $TRAFD_HDR_I_LEN)) == 0) {
-		last;
+		last; # EOF
 	} elsif ($bytes != $TRAFD_HDR_I_LEN) {
 		die "Error occured. $fname: Incorrect data structure\n";
 	}
@@ -138,11 +138,6 @@ $src_addr, $src_port, $dst_addr, $dst_port, $ip_protocol, $n_psize
 	        $dst_addr = "$d1.$d2.$d3.$d4";
 	        $dst_port = '';
 
-		# we need only to process the records for specified ipaddress
-		if ($ipaddr) {
-			next unless $ipaddr eq $src_addr or $ipaddr eq $dst_addr;
-		}
-
 		# ip_protocol: tcp or udp
 		if ($ip_protocol == 6 or $ip_protocol == 12) {
 			if ($who_srv == 0) {
@@ -162,7 +157,11 @@ $src_addr, $src_port, $dst_addr, $dst_port, $ip_protocol, $n_psize
 		$src_port = $services->{$src_port} if $opts{s} && $services->{$src_port};
 		$dst_port = $services->{$dst_port} if $opts{s} && $services->{$dst_port};
 
-		$ipaddr_traffic += $n_psize if $ipaddr && $ipaddr eq $dst_addr;
+		# we need only to process the records for specified ipaddress
+		if ($ipaddr) {
+			$ipaddr_traffic += $n_psize if $ipaddr eq $dst_addr;
+			next unless $ipaddr eq $src_addr or $ipaddr eq $dst_addr;
+		}
 
 		write if $opts{r};
 #		printf "%s|%s|%s|%s|%s|%ul\n", $src_addr, $src_port, 
