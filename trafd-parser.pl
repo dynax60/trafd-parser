@@ -32,9 +32,9 @@ ipaddr    - count incoming traffic for that ipaddress
 
 Options:
   -d	Show dump information: datetime and how many entries it have
-  -r    Show detailed traffic records from dumps
-  -h    Usage human form output calculation for specified ipaddr (see above)
-  -p    Substitute numeric ip protocols by names in detailed traffic (/etc/protocols)
+  -r	Show detailed traffic records from dumps
+  -h	Usage human form output calculation for specified ipaddr (see above)
+  -p	Substitute numeric ip protocols by names in detailed traffic (/etc/protocols)
   -s	Substitute numeric services by names in detailed traffic (/etc/services)
 
 EOF
